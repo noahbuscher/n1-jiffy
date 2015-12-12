@@ -1,0 +1,21 @@
+{
+  "name": "N1-Gifs",
+  "main": "./lib/main.es6",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/noahbuscher/N1-Gifs"
+  },
+  "engines": {
+    "nylas": ">=0.3.29-1904c6f"
+  },
+  "description": "N1 plugin to boost your gif game.",
+  "dependencies": {
+    "giphy-api": "^1.1.11"
+  },
+  "windowTypes": {
+    "default": true,
+    "composer": true
+  },
+  "license": "MIT"
+}
