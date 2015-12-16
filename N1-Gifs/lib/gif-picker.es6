@@ -1,14 +1,40 @@
-import {DraftStore, QuotedHTMLParser, React} from 'nylas-exports';
+import {DraftStore, QuotedHTMLParser, Utils, DOMUtils, React, ComposerExtension} from 'nylas-exports';
 import {Popover} from 'nylas-component-kit';
+let rangy = require('rangy');
 
 // Using Giphy testing key for now
-var giphy = require('giphy-api')('dc6zaTOxFJmzC');
+let giphy = require('giphy-api')('dc6zaTOxFJmzC');
+
+class GifSaveState extends ComposerExtension {
+  static onBlur(editableNode, range, event) {
+    let elem = document.getElementsByClassName('contenteditable')[0];
+
+    if (document.getElementById('n1-gif-marker') !== null) {
+      var markerOld = document.getElementById('n1-gif-marker');
+      markerOld.outerHTML = '';
+      delete markerOld;
+    }
+
+    let marker = '<span id="n1-gif-marker"></span>';
+    document.execCommand('insertHTML', true, marker);
+  }
+
+  static onFocus(editableNode, range, event) {
+    let elem = document.getElementsByClassName('contenteditable')[0];
+
+    if (document.getElementById('n1-gif-marker') !== null) {
+      var markerOld = document.getElementById('n1-gif-marker');
+      markerOld.outerHTML = '';
+      delete markerOld;
+    }
+  }
+}
 
 class GifPicker extends React.Component {
   static displayName = 'GifPicker';
 
-  static propTypes = {
-    draftClientId: React.PropTypes.string.isRequired
+  static innerPropTypes = {
+    selection: React.PropTypes.object
   }
 
   render() {
@@ -20,22 +46,24 @@ class GifPicker extends React.Component {
 
     return (
       <Popover ref="popover" className="gif-picker pull-right" buttonComponent={button}>
-        <GifBox draftClientId={this.props.draftClientId}></GifBox>
+        <GifBox></GifBox>
       </Popover>
     );
   }
 }
 
 // Indivigual gif
-var Gif = React.createClass({
+let Gif = React.createClass({
   chooseGif: function(event) {
-    var gifUrl = this.props.gifUrl;
+    let gifUrl = this.props.gifUrl;
+    let gifElem = '<span><img src="' + gifUrl + '"></span>';
+    let elem = document.getElementsByClassName('contenteditable')[0];
 
-    DraftStore.sessionForClientId(this.props.draftClientId).then(function(session) {
-      let gifImg = '<img src="' + gifUrl + '"/>';
-      let draftHtml = QuotedHTMLParser.appendQuotedHTML(gifImg, session.draft().body);
-      session.changes.add({body: draftHtml});
-    });
+    let sel = window.getSelection();
+    let marker = document.getElementById('n1-gif-marker');
+    sel.setBaseAndExtent(marker, 0, marker, 0);
+    document.execCommand('insertHTML', true, gifElem);
+    elem.focus();
   },
   getStyles: function() {
     return {
@@ -52,12 +80,12 @@ var Gif = React.createClass({
 });
 
 // Collection of all gifs in a category
-var GifList = React.createClass({
+let GifList = React.createClass({
   render: function() {
-    var self = this;
-    var gifNodes = this.props.data.map(function(gif) {
+    let self = this;
+    let gifNodes = this.props.data.map(function(gif) {
       return (
-        <Gif gifUrl={gif.images.fixed_height_small.url} key={gif.id} draftClientId={self.props.draftClientId}></Gif>
+        <Gif gifUrl={gif.images.fixed_height_small.url} key={gif.id}></Gif>
       );
     });
     return (
@@ -69,7 +97,7 @@ var GifList = React.createClass({
 });
 
 // Container
-var GifBox = React.createClass({
+let GifBox = React.createClass({
   getInitialState: function() {
     return {
       gifs: [],
@@ -101,16 +129,16 @@ var GifBox = React.createClass({
     }.bind(this));
   },
   render: function() {
-    var value = this.state.value;
+    let value = this.state.value;
     return (
       <div className="gifBox">
         <h4>Search Gifs</h4>
         <small>Powered by Giphy</small>
         <input type="text" placeholder="Kittens, rofl" value={value} onKeyDown={this.handleKeyDown} onChange={this.handleChange}/>
-        <GifList data={this.state.gifs} draftClientId={this.props.draftClientId}></GifList>
+        <GifList data={this.state.gifs}></GifList>
       </div>
     );
   }
 });
 
-export default GifPicker;
+export {GifSaveState, GifPicker};

@@ -11,7 +11,8 @@
   },
   "description": "N1 plugin to boost your gif game.",
   "dependencies": {
-    "giphy-api": "^1.1.11"
+    "giphy-api": "^1.1.11",
+    "rangy": "^1.3.0"
   },
   "windowTypes": {
     "default": true,
