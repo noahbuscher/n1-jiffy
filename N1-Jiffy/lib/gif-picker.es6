@@ -1,6 +1,5 @@
 import {DraftStore, QuotedHTMLParser, Utils, DOMUtils, React, ComposerExtension} from 'nylas-exports';
 import {Popover} from 'nylas-component-kit';
-let rangy = require('rangy');
 
 // Using Giphy testing key for now
 let giphy = require('giphy-api')('dc6zaTOxFJmzC');
