@@ -1,10 +1,10 @@
 {
-  "name": "n1-gifs",
+  "name": "n1-jiffy",
   "main": "./lib/main.es6",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "http://github.com/noahbuscher/N1-Gifs"
+    "url": "http://github.com/noahbuscher/N1-Jiffy"
   },
   "engines": {
     "nylas": ">=0.3.29-1904c6f"
