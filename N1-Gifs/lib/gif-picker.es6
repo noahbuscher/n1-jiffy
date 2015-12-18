@@ -15,8 +15,12 @@ class GifSaveState extends ComposerExtension {
       delete markerOld;
     }
 
-    let marker = '<span id="n1-gif-marker"></span>';
-    document.execCommand('insertHTML', true, marker);
+    let r = document.createRange();
+    r.setStart(range.anchorNode, range.anchorOffset);
+    r.setEnd(range.anchorNode, range.anchorOffset);
+    let marker = document.createElement('span');
+    marker.id = 'n1-gif-marker';
+    r.insertNode(marker);
   }
 
   static onFocus(editableNode, range, event) {
@@ -35,7 +39,9 @@ class GifPicker extends React.Component {
 
   static innerPropTypes = {
     selection: React.PropTypes.object
-  }
+  };
+
+  static containerStyles = {order: 2};
 
   render() {
     const button = (
@@ -45,7 +51,7 @@ class GifPicker extends React.Component {
     );
 
     return (
-      <Popover ref="popover" className="gif-picker pull-right" buttonComponent={button}>
+      <Popover ref="popover" className="gif-picker" buttonComponent={button}>
         <GifBox></GifBox>
       </Popover>
     );
@@ -133,7 +139,7 @@ let GifBox = React.createClass({
     return (
       <div className="gifBox">
         <h4>Search Gifs</h4>
-        <small>Powered by Giphy</small>
+        <a href="http://giphy.com"><small>Powered by Giphy</small></a>
         <input type="text" placeholder="Kittens, rofl" value={value} onKeyDown={this.handleKeyDown} onChange={this.handleChange}/>
         <GifList data={this.state.gifs}></GifList>
       </div>

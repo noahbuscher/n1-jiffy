@@ -1,5 +1,5 @@
 {
-  "name": "N1-Gifs",
+  "name": "n1-gifs",
   "main": "./lib/main.es6",
   "version": "0.1.0",
   "repository": {
@@ -9,10 +9,9 @@
   "engines": {
     "nylas": ">=0.3.29-1904c6f"
   },
-  "description": "N1 plugin to boost your gif game.",
+  "description": "N1 plugin to boost your gif game",
   "dependencies": {
-    "giphy-api": "^1.1.11",
-    "rangy": "^1.3.0"
+    "giphy-api": "^1.1.11"
   },
   "windowTypes": {
     "default": true,
