@@ -4,7 +4,7 @@ import {Popover} from 'nylas-component-kit';
 // Using Giphy testing key for now
 let giphy = require('giphy-api')('dc6zaTOxFJmzC');
 
-class GifSaveState extends ComposerExtension {
+export class GifSaveState extends ComposerExtension {
   static onBlur(editableNode, range, event) {
     let elem = document.getElementsByClassName('contenteditable')[0];
 
@@ -33,7 +33,7 @@ class GifSaveState extends ComposerExtension {
   }
 }
 
-class GifPicker extends React.Component {
+export class GifPicker extends React.Component {
   static displayName = 'GifPicker';
 
   static innerPropTypes = {
@@ -41,6 +41,17 @@ class GifPicker extends React.Component {
   };
 
   static containerStyles = {order: 2};
+
+  constructor(props) {
+    super(props);
+
+    this.closePopover = this.closePopover.bind(this);3
+    this.render = this.render.bind(this);
+  }
+
+  closePopover() {
+    this.refs.popover.close();
+  }
 
   render() {
     const button = (
@@ -51,17 +62,26 @@ class GifPicker extends React.Component {
 
     return (
       <Popover ref="popover" className="gif-picker" buttonComponent={button}>
-        <GifBox></GifBox>
+        <GifBox closePopover={this.closePopover} />
       </Popover>
     );
   }
 }
 
 // Indivigual gif
-let Gif = React.createClass({
-  chooseGif: function(event) {
+class Gif extends React.Component {
+  static displayName = 'Gif';
+
+  constructor(props) {
+    super(props);
+
+    this.chooseGif = this.chooseGif.bind(this);
+    this.render = this.render.bind(this);
+  }
+
+  chooseGif(event) {
     let gifUrl = this.props.gifUrl;
-    let gifElem = '<span><img src="' + gifUrl + '"></span>';
+    let gifElem = `<span><img src="${gifUrl}"></span>`;
     let elem = document.getElementsByClassName('contenteditable')[0];
 
     let sel = window.getSelection();
@@ -69,28 +89,31 @@ let Gif = React.createClass({
     sel.setBaseAndExtent(marker, 0, marker, 0);
     document.execCommand('insertHTML', true, gifElem);
     elem.focus();
-  },
-  getStyles: function() {
-    return {
-      backgroundImage: 'url(' + this.props.gifUrl + ')'
-    };
-  },
-  render: function() {
+  }
+
+  render() {
     return (
-      <div className="gif" gifUrl={this.props.gifUrl} onMouseDown={this.chooseGif}>
-        <img style={this.getStyles()}/>
+      <div className="gif" onMouseDown={this.chooseGif}>
+        <img src={this.props.gifUrl} />
       </div>
     );
   }
-});
+}
 
 // Collection of all gifs in a category
-let GifList = React.createClass({
-  render: function() {
-    let self = this;
-    let gifNodes = this.props.data.map(function(gif) {
+class GifList extends React.Component {
+  static displayName = 'GifList';
+
+  constructor(props) {
+    super(props);
+
+    this.render = this.render.bind(this);
+  }
+
+  render() {
+    let gifNodes = this.props.data.map((gif) => {
       return (
-        <Gif gifUrl={gif.images.fixed_height_small.url} key={gif.id}></Gif>
+        <Gif gifUrl={gif.images.fixed_height_small.url} key={gif.id} />
       );
     });
     return (
@@ -99,51 +122,59 @@ let GifList = React.createClass({
       </div>
     );
   }
-});
+}
 
 // Container
-let GifBox = React.createClass({
-  getInitialState: function() {
-    return {
+class GifBox extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.searchGifs = this.searchGifs.bind(this);
+    this.render = this.render.bind(this);
+
+    this.state = {
       gifs: [],
       value: ''
     };
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     // Load trending to start off with
-    giphy.trending(function(err, results) {
+    giphy.trending((err, results) => {
       if (!err) {
         this.setState({gifs: results.data});
+      } else {
+        console.error(err);
       }
-    }.bind(this));
-  },
-  handleChange: function(event) {
+    });
+  }
+
+  handleChange(event) {
     this.setState({value: event.target.value});
-  },
-  handleKeyDown: function(event) {
-    if (event.key === 'Enter') {
-      this.searchGifs();
-    }
-  },
-  searchGifs: function() {
+  }
+
+  searchGifs() {
     // Search gifs with specific keyword
-    giphy.search(this.state.value, function(err, results) {
+    giphy.search(this.state.value, (err, results) => {
       if (!err) {
         this.setState({gifs: results.data});
+      } else {
+        console.error(err);
       }
-    }.bind(this));
-  },
-  render: function() {
+    });
+  }
+
+  render() {
     let value = this.state.value;
     return (
       <div className="gifBox">
         <h4>Search Gifs</h4>
         <a href="http://giphy.com"><small>Powered by Giphy</small></a>
-        <input type="text" placeholder="Kittens, rofl" value={value} onKeyDown={this.handleKeyDown} onChange={this.handleChange}/>
+        <input type="text" placeholder="Kittens, rofl" value={value} onSubmit={this.searchGifs} onChange={this.handleChange} />
         <GifList data={this.state.gifs}></GifList>
       </div>
     );
   }
-});
-
-export {GifSaveState, GifPicker};
+}
