@@ -2,7 +2,7 @@
 
 Jiffy is a simple plugin to search and insert dope gifs from Giphy.
 
-![](./preview.gif)
+![](./preview.png)
 
 ## Installing
 

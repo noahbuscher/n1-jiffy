@@ -93,8 +93,8 @@ class Gif extends React.Component {
 
   render() {
     return (
-      <div className="gif" onMouseDown={this.chooseGif}>
-        <img src={this.props.gifUrl} />
+      <div className="gif" onMouseDown={this.chooseGif}
+           style={{backgroundImage: 'url(' + this.props.gifUrl + ')'}}>
       </div>
     );
   }
@@ -158,7 +158,7 @@ class GifBox extends React.Component {
 
   handleKeyDown(event) {
     if (event.key === 'Enter') {
-      searchGifs();
+      this.searchGifs();
     }
   }
 
