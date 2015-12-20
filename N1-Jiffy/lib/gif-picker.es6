@@ -131,6 +131,7 @@ class GifBox extends React.Component {
 
     this.componentDidMount = this.componentDidMount.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.searchGifs = this.searchGifs.bind(this);
     this.render = this.render.bind(this);
 
@@ -155,6 +156,12 @@ class GifBox extends React.Component {
     this.setState({value: event.target.value});
   }
 
+  handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      searchGifs();
+    }
+  }
+
   searchGifs() {
     // Search gifs with specific keyword
     giphy.search(this.state.value, (err, results) => {
@@ -172,7 +179,7 @@ class GifBox extends React.Component {
       <div className="gifBox">
         <h4>Search Gifs</h4>
         <a href="http://giphy.com"><small>Powered by Giphy</small></a>
-        <input type="text" placeholder="Kittens, rofl" value={value} onSubmit={this.searchGifs} onChange={this.handleChange} />
+        <input type="text" placeholder="Kittens, rofl" value={value} onKeyDown={this.handleKeyDown} onChange={this.handleChange} />
         <GifList data={this.state.gifs}></GifList>
       </div>
     );
