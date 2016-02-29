@@ -1,44 +1,96 @@
 @import "ui-variables";
 @import "ui-mixins";
 
-.gifBox {
-  padding: 10px 20px 20px 20px;
-  width: 100%;
+.gif-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  position: relative;
+}
 
-  h4 {
-    margin-bottom: 5px;
-  }
+.gif-header-container {
+  padding: 7.5px 12px;
+}
 
-  a {
-    text-decoration: none;
-  }
+.gif-content-container {
+  height: 200px;
+  width: 240px;
+  overflow: auto;
+  overflow-y: scroll;
+  white-space: normal;
+  padding: 0 2px;
 
-  small {
-    font-size: 11px;
-    margin-bottom: 5px;
-  }
+  .gif {
+    display: inline-block;
+    width: 25%;
+    padding: 0 2px;
+    margin-bottom: -2px;
+    cursor: pointer;
 
-  input {
-    padding: 5px 0;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .gifList {
-    max-height: 200px;
-    width: 100%;
-    overflow-y: scroll;
-    margin: auto;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-
-    .gif {
-      width: 25%;
-      height: 40px;
+    > span {
+      display: block;
+      width: 100%;
+      height: 36px;
       background-position: center;
+      background-size: cover;
       background-repeat: no-repeat;
       border-width: 0 !important;
+      border-radius: 2px;
     }
   }
 }
+
+.gif-footer-container {
+  padding: 5px 12px;
+  font-size: 14px;
+  color: #231f20;
+  border-top: 1px solid #dddddd;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+// .gifBox {
+//   padding: 10px 20px 20px 20px;
+//   width: 100%;
+//
+//   h4 {
+//     margin-bottom: 5px;
+//   }
+//
+//   a {
+//     text-decoration: none;
+//   }
+//
+//   small {
+//     font-size: 11px;
+//     margin-bottom: 5px;
+//   }
+//
+//   input {
+//     padding: 5px 0;
+//     width: 100%;
+//     margin-bottom: 10px;
+//   }
+//
+//   .gifList {
+//     max-height: 200px;
+//     width: 100%;
+//     overflow-y: scroll;
+//     margin: auto;
+//     display: flex;
+//     flex-flow: row wrap;
+//     justify-content: space-around;
+//
+//     .gif {
+//       width: 25%;
+//       height: 40px;
+//       background-position: center;
+//       background-repeat: no-repeat;
+//       border-width: 0 !important;
+//     }
+//   }
+// }
