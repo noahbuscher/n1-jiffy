@@ -1,5 +1,5 @@
 import {DraftStore, QuotedHTMLParser, Utils, DOMUtils, React, ComposerExtension} from 'nylas-exports';
-import {Popover} from 'nylas-component-kit';
+import {Popover, RetinaImg} from 'nylas-component-kit';
 
 // Using Giphy testing key for now
 let giphy = require('giphy-api')('dc6zaTOxFJmzC');
@@ -55,8 +55,8 @@ export class GifPicker extends React.Component {
 
   render() {
     const button = (
-      <button className="btn btn-toolbar narrow">
-        Gif it!
+      <button className="btn btn-toolbar narrow" title="Insert gif…">
+        <RetinaImg url="nylas://N1-Jiffy/assets/icon-composer-jiffy@2x.png" mode={RetinaImg.Mode.ContentIsMask}/>
       </button>
     );
 
@@ -81,7 +81,7 @@ class Gif extends React.Component {
 
   chooseGif(event) {
     let gifUrl = this.props.gifUrl;
-    let gifElem = `<span><img src="${gifUrl}"></span>`;
+    let gifElem = `<span><img src="${ gifUrl }"></span>`;
     let elem = document.getElementsByClassName('contenteditable')[0];
 
     let sel = window.getSelection();
@@ -93,8 +93,8 @@ class Gif extends React.Component {
 
   render() {
     return (
-      <div className="gif" onMouseDown={this.chooseGif}
-           style={{backgroundImage: 'url(' + this.props.gifUrl + ')'}}>
+      <div className="gif" onMouseDown={this.chooseGif}>
+        <span style={{backgroundImage: `url(${ this.props.gifUrl })`}} />
       </div>
     );
   }
@@ -117,7 +117,7 @@ class GifList extends React.Component {
       );
     });
     return (
-      <div className="gifList">
+      <div className="gif-content-container">
         {gifNodes}
       </div>
     );
@@ -176,11 +176,22 @@ class GifBox extends React.Component {
   render() {
     let value = this.state.value;
     return (
-      <div className="gifBox">
-        <h4>Search Gifs</h4>
-        <a href="http://giphy.com"><small>Powered by Giphy</small></a>
-        <input type="text" placeholder="Kittens, rofl" value={value} onKeyDown={this.handleKeyDown} onChange={this.handleChange} />
+      <div className="gif-menu">
+        <div className="gif-header-container">
+          <input
+            type="text"
+            className="search"
+            tabIndex="1"
+            placeholder="Kittens, rofl"
+            value={value}
+            onKeyDown={this.handleKeyDown}
+            onChange={this.handleChange}
+          />
+        </div>
         <GifList data={this.state.gifs}></GifList>
+        <div className="gif-footer-container">
+          <a href="http://giphy.com">Powered by Giphy</a>
+        </div>
       </div>
     );
   }
