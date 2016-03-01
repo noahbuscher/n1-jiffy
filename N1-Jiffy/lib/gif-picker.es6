@@ -1,5 +1,5 @@
 import {DraftStore, QuotedHTMLParser, Utils, DOMUtils, React, ComposerExtension} from 'nylas-exports';
-import {Popover} from 'nylas-component-kit';
+import {Popover, RetinaImg} from 'nylas-component-kit';
 
 // Using Giphy testing key for now
 let giphy = require('giphy-api')('dc6zaTOxFJmzC');
@@ -55,8 +55,8 @@ export class GifPicker extends React.Component {
 
   render() {
     const button = (
-      <button className="btn btn-toolbar narrow">
-        Gif it!
+      <button className="btn btn-toolbar narrow" title="Insert gif…">
+        <RetinaImg url="nylas://N1-Jiffy/assets/icon-composer-jiffy@2x.png" mode={RetinaImg.Mode.ContentIsMask}/>
       </button>
     );
 

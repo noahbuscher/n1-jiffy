@@ -1,5 +1,5 @@
 @import "ui-variables";
-@import "ui-mixins";
+@header-color: #afafaf;
 
 .gif-menu {
   flex: 1;
@@ -10,7 +10,8 @@
 }
 
 .gif-header-container {
-  padding: 7.5px 12px;
+  color: @header-color;
+  padding: @padding-base-vertical * 1.5  @padding-base-horizontal;
 }
 
 .gif-content-container {
@@ -42,10 +43,10 @@
 }
 
 .gif-footer-container {
-  padding: 5px 12px;
+  padding: @padding-base-vertical @padding-base-horizontal;
   font-size: 14px;
-  color: #231f20;
-  border-top: 1px solid #dddddd;
+  color: @accent-primary;
+  border-top: 1px solid @list-border;
 
   a {
     text-decoration: none;
