@@ -5,30 +5,18 @@ import {Popover, RetinaImg} from 'nylas-component-kit';
 let giphy = require('giphy-api')('dc6zaTOxFJmzC');
 
 export class GifSaveState extends ComposerExtension {
-  static onBlur(editableNode, range, event) {
-    let elem = document.getElementsByClassName('contenteditable')[0];
-
-    if (document.getElementById('n1-gif-marker') !== null) {
-      var markerOld = document.getElementById('n1-gif-marker');
-      markerOld.outerHTML = '';
-      delete markerOld;
-    }
-
-    let r = document.createRange();
-    r.setStart(range.anchorNode, range.anchorOffset);
-    r.setEnd(range.anchorNode, range.anchorOffset);
-    let marker = document.createElement('span');
-    marker.id = 'n1-gif-marker';
-    r.insertNode(marker);
+  static sel = null;
+  static onBlur(editor, event) {
+    // Save the current selection when focus is lost
+    GifSaveState.sel = editor.currentSelection().exportSelection()
   }
 
-  static onFocus(editableNode, range, event) {
-    let elem = document.getElementsByClassName('contenteditable')[0];
-
-    if (document.getElementById('n1-gif-marker') !== null) {
-      var markerOld = document.getElementById('n1-gif-marker');
-      markerOld.outerHTML = '';
-      delete markerOld;
+  static onFocus(editor, event) {
+    // If we have a saved selection, restore and clear it
+    // when contenteditable is focused
+    if(GifSaveState.sel) {
+      editor.select(GifSaveState.sel);
+      GifSaveState.sel = null;
     }
   }
 }
@@ -45,7 +33,7 @@ export class GifPicker extends React.Component {
   constructor(props) {
     super(props);
 
-    this.closePopover = this.closePopover.bind(this);3
+    this.closePopover = this.closePopover.bind(this);
     this.render = this.render.bind(this);
   }
 
@@ -68,7 +56,7 @@ export class GifPicker extends React.Component {
   }
 }
 
-// Indivigual gif
+// Individual gif
 class Gif extends React.Component {
   static displayName = 'Gif';
 
@@ -84,11 +72,8 @@ class Gif extends React.Component {
     let gifElem = `<span><img src="${ gifUrl }"></span>`;
     let elem = document.getElementsByClassName('contenteditable')[0];
 
-    let sel = window.getSelection();
-    let marker = document.getElementById('n1-gif-marker');
-    sel.setBaseAndExtent(marker, 0, marker, 0);
-    document.execCommand('insertHTML', true, gifElem);
     elem.focus();
+    document.execCommand('insertHTML', true, gifElem);
   }
 
   render() {
