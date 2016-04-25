@@ -1,4 +1,11 @@
-import {DraftStore, QuotedHTMLParser, Utils, DOMUtils, React, ComposerExtension} from 'nylas-exports';
+import {DraftStore,
+  QuotedHTMLParser,
+  Utils,
+  DOMUtils,
+  React,
+  ReactDOM,
+  Actions,
+  ComposerExtension} from 'nylas-exports';
 import {Popover, RetinaImg} from 'nylas-component-kit';
 
 // Using Giphy testing key for now
@@ -32,26 +39,26 @@ export class GifPicker extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.closePopover = this.closePopover.bind(this);
     this.render = this.render.bind(this);
   }
 
-  closePopover() {
-    this.refs.popover.close();
+  onClick = ()=> {
+    const buttonRect = ReactDOM.findDOMNode(this).getBoundingClientRect();
+    Actions.openPopover(
+      <GifBox />,
+      {originRect: buttonRect, direction: 'up'}
+    );
   }
 
   render() {
-    const button = (
-      <button className="btn btn-toolbar narrow" title="Insert gif…">
+    return (
+      <button
+        tabIndex={-1}
+        className="btn btn-toolbar narrow"
+        title="Insert gif…"
+        onClick={this.onClick}>
         <RetinaImg url="nylas://N1-Jiffy/assets/icon-composer-jiffy@2x.png" mode={RetinaImg.Mode.ContentIsMask}/>
       </button>
-    );
-
-    return (
-      <Popover ref="popover" className="gif-picker" buttonComponent={button}>
-        <GifBox closePopover={this.closePopover} />
-      </Popover>
     );
   }
 }

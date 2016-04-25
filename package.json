@@ -1,5 +1,6 @@
 {
   "name": "n1-jiffy",
+  "title": "Jiffy",
   "main": "./lib/main.es6",
   "version": "0.1.4",
   "repository": {
@@ -9,7 +10,7 @@
   "engines": {
     "nylas": ">=0.3.29-1904c6f"
   },
-  "description": "N1 plugin to boost your gif game",
+  "description": "A plugin to boost your GIF game.",
   "dependencies": {
     "giphy-api": "^1.1.11"
   },
