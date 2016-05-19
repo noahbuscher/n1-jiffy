@@ -13,12 +13,12 @@ let giphy = require('giphy-api')('dc6zaTOxFJmzC');
 
 export class GifSaveState extends ComposerExtension {
   static sel = null;
-  static onBlur(editor, event) {
+  static onBlur({editor, event}) {
     // Save the current selection when focus is lost
     GifSaveState.sel = editor.currentSelection().exportSelection()
   }
 
-  static onFocus(editor, event) {
+  static onFocus({editor, event}) {
     // If we have a saved selection, restore and clear it
     // when contenteditable is focused
     if(GifSaveState.sel) {
